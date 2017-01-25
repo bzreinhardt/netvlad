@@ -10,6 +10,11 @@ feats= computeRepresentation(net, im, 'useGPU', false); % add `'useGPU', false` 
 
 %  To test the network on a place recognition dataset, set up the test dataset
 dbs = {dbMS7Chess(), dbMS7Fire(), dbMS7Heads(), dbMS7Office(), dbMS7Pumpkin(), dbMS7RedKitchen(), dbMS7Stairs()};
+recalls = {};
+rankLosses = {};
+allRecallses = {};
+allOpts = {};
+allResults = {};
 for i = 1:length(dbs)
     dbTest= dbs{i}
     
@@ -22,10 +27,13 @@ for i = 1:length(dbs)
     % Compute db/query image representations
     serialAllFeats(net, dbTest.dbPath, dbTest.dbImageFns, dbFeatFn, 'batchSize', 10, 'useGPU', false); % adjust batchSize depending on your GPU / network size
     serialAllFeats(net, dbTest.qPath, dbTest.qImageFns, qFeatFn, 'batchSize', 1, 'useGPU', false); % Tokyo 24/7 query images have different resolutions so batchSize is constrained to 1
-
-   
+     % Measure recall@N
+    [recall, rankloss, allRecalls, opts, results]= testFromFn(dbTest, dbFeatFn, qFeatFn);
+    plot(opts.recallNs, recall, 'ro-'); grid on; xlabel('N'); ylabel('Recall@N');
+    recalls{i} = recall;
+    rankLosses{i} = rankloss;
+    allRecallses{i} = allRecalls;
+    allOpts{i} = opts;
+    allResults{i} = results;
 end
 
- % Measure recall@N
-    %[recall, ~, ~, opts]= testFromFn(dbTest, dbFeatFn, qFeatFn);
-    %plot(opts.recallNs, recall, 'ro-'); grid on; xlabel('N'); ylabel('Recall@N');

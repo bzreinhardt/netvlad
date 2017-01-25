@@ -1,4 +1,4 @@
-function [recall, rankloss, allRecalls, opts]= testFromFn(db, dbFeatFn, qFeatFn, opts, varargin)
+function [recall, rankloss, allRecalls, opts, results]= testFromFn(db, dbFeatFn, qFeatFn, opts, varargin)
     
     if nargin<4 || isempty(opts)
         % a bit hacky but fine..
@@ -35,5 +35,5 @@ function [recall, rankloss, allRecalls, opts]= testFromFn(db, dbFeatFn, qFeatFn,
     else
         rankloss= [];
     end
-    [recall, allRecalls]= testCore(db, qFeat, dbFeat, 'nTestSample', opts.nTestSample, 'recallNs', opts.recallNs);
+    [recall, allRecalls, results]= testCore(db, qFeat, dbFeat, 'nTestSample', opts.nTestSample, 'recallNs', opts.recallNs);
 end

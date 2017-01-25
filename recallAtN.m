@@ -1,4 +1,4 @@
-function [res, recalls]= recallAtN(searcher, nQueries, isPos, ns, printN, nSample)
+function [res, recalls, results]= recallAtN(searcher, nQueries, isPos, ns, printN, nSample)
     if nargin<6, nSample= inf; end
     
     rngState= rng;
@@ -17,7 +17,7 @@ function [res, recalls]= recallAtN(searcher, nQueries, isPos, ns, printN, nSampl
     printRecalls= zeros(length(toTest),1);
     
     evalProg= tic;
-    
+    results = {}
     for iTestSample= 1:length(toTest)
         
         relja_progress(iTestSample, ...
@@ -27,6 +27,7 @@ function [res, recalls]= recallAtN(searcher, nQueries, isPos, ns, printN, nSampl
         iTest= toTest(iTestSample);
         
         ids= searcher(iTest, nTop);
+        results{iTest} = ids;
         numReturned= length(ids);
         assert(numReturned<=nTop); % if your searcher returns fewer, it's your fault
         

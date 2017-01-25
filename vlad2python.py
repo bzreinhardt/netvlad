@@ -12,6 +12,6 @@ def open_netvlad_descriptors(file, descriptor_size=4096):
     raw_array.byteswap()
   buff = np.array(raw_array)
   # Assume numbers are divisable by descriptor_size
-  return buff.reshape((descriptor_size, buff.size/num_descriptors))
+  return buff.reshape((descriptor_size, buff.size/descriptor_size))
 	
 
